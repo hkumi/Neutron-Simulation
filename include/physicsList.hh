@@ -9,6 +9,9 @@ public:
   MyPhysicsList();
   ~MyPhysicsList();
 
+public: 
+    virtual void SetCuts();
+
 };
 
 #endif
