@@ -7,7 +7,7 @@
 
 #include "DetectorConstruction.hh"
 
-//#include "MyPrimaryGeneratorAction.hh"
+#include "ActionInitialization.hh"
 //#include "MyRunAction.hh"
 
 //#include "Randomize.hh"
@@ -27,7 +27,7 @@ int main(int argc, char** argv)
    // #ifdef COMPILATION_SWITCH == "neutronPhysicsList"
     //#include "PhysicsList.hh"
     runManager->SetUserInitialization(new MyPhysicsList());
-
+    runManager->SetUserInitialization(new MyActionInitialization());
 
     runManager->Initialize();
 
