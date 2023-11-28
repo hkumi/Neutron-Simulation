@@ -60,7 +60,7 @@ private:
 	G4LogicalVolume *logicalLab{nullptr};
 	G4LogicalVolume *logicalTarget{nullptr};
 	G4LogicalVolume *logicalShield{nullptr};
-
+        G4LogicalVolume *logicDetector;
 	G4VPhysicalVolume *physicalLab{nullptr};
 
 	G4Material *labMaterial{nullptr};
