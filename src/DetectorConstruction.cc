@@ -16,7 +16,7 @@
 DetectorConstruction::DetectorConstruction()
 :
 G4VUserDetectorConstruction(),
-halfLabSize(G4ThreeVector(30*cm, 30*cm, 30*cm))
+halfLabSize(G4ThreeVector(0.5*m, 0.5*m, 0.5*m))
 {
 	myDetectorMessenger = new MyDetectorMessenger(this);
 	SetActiveRotationAxisAngle(G4ThreeVector(0, 1, 0), 5*deg);
@@ -238,19 +238,27 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
        /////............................DEFINE SENSITIVE DETECTOR TO DETECT THE NEUTRONS.................
         G4NistManager *nist = G4NistManager::Instance();
         G4Material *air = nist->FindOrBuildMaterial("G4_AIR");
-        G4Box *solidDetector = new G4Box("solidDetector",0.003*m,0.003*m,0.01*m);
+        G4Box *solidDetector = new G4Box("solidDetector",0.005*m,0.005*m,0.01*m);
         logicDetector = new G4LogicalVolume(solidDetector,air,"logicDetector");
         for(G4int i = 0; i<100;i++)
         {
            for(G4int j = 0; j<100;j++)
            {
-              G4VPhysicalVolume *physDetector = new G4PVPlacement(0,G4ThreeVector(-0.3*m+(i+0.3)*m/100,-0.3*m+(j+0.3)*m/100,0.28*m),logicDetector,"physDetector", logicalLab,false,j+i*100,true);
+              G4VPhysicalVolume *physDetector = new G4PVPlacement(0,G4ThreeVector(-0.5*m+(i+0.5)*m/100,-0.5*m+(j+0.5)*m/100,0.49*m),logicDetector,"physDetector", logicalLab,false,j+i*100,true);
            }
         } 
 
        ///..............................END OF SENSITIVE DETECTOR.......................................
 
 	return physicalLab;
+}
+
+void DetectorConstruction::ConstructSDandField()
+{
+    MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
+
+    logicDetector->SetSensitiveDetector(sensDet);
+
 }
 
 void DetectorConstruction::SetLabMaterial(const G4String& labMaterial)
