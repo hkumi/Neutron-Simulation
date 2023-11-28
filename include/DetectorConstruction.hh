@@ -8,6 +8,7 @@
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
+#include "detector.hh"
 class MyDetectorMessenger;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -72,6 +73,7 @@ private:
 
 	void DefineMaterials();
 	G4VPhysicalVolume* ConstructDetector();
+        virtual void ConstructSDandField();
 
 };
 
