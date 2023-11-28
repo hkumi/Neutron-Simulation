@@ -131,7 +131,7 @@ void DetectorConstruction::DefineMaterials()
         b_polyethylene->AddElement(O, 22.2*perCent);
 //	Prevent changing materials to default values if they were adjusted at run time:
 	if (labMaterial == nullptr)
-		labMaterial = H2Opressurised;
+		labMaterial = vacuum;
 
 	if (targetMaterial == nullptr)
 		targetMaterial = polyethylene;
@@ -233,7 +233,22 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 						  checkOverlaps); 				// checking overlaps
 
 		logicalShield->SetVisAttributes(brown);
-	}
+	} 
+
+       /////............................DEFINE SENSITIVE DETECTOR TO DETECT THE NEUTRONS.................
+        G4NistManager *nist = G4NistManager::Instance();
+        G4Material *air = nist->FindOrBuildMaterial("G4_AIR");
+        G4Box *solidDetector = new G4Box("solidDetector",0.003*m,0.003*m,0.01*m);
+        logicDetector = new G4LogicalVolume(solidDetector,air,"logicDetector");
+        for(G4int i = 0; i<100;i++)
+        {
+           for(G4int j = 0; j<100;j++)
+           {
+              G4VPhysicalVolume *physDetector = new G4PVPlacement(0,G4ThreeVector(-0.3*m+(i+0.3)*m/100,-0.3*m+(j+0.3)*m/100,0.28*m),logicDetector,"physDetector", logicalLab,false,j+i*100,true);
+           }
+        } 
+
+       ///..............................END OF SENSITIVE DETECTOR.......................................
 
 	return physicalLab;
 }
@@ -317,3 +332,4 @@ void DetectorConstruction::SetActiveRotationAxisAngle(G4ThreeVector rotationAxis
 //  Rotation takes effect upon: /run/beamOn
 	G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
+
