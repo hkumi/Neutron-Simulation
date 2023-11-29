@@ -253,6 +253,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 	return physicalLab;
 }
 
+///........................FUNCTION TO ADD THE DETECTOR TO THE SENSITIVE DETECTOR...................
+
 void DetectorConstruction::ConstructSDandField()
 {
     MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
@@ -260,6 +262,7 @@ void DetectorConstruction::ConstructSDandField()
     logicDetector->SetSensitiveDetector(sensDet);
 
 }
+//..........................END OF FUNCTION...............................................
 
 void DetectorConstruction::SetLabMaterial(const G4String& labMaterial)
 {
@@ -277,6 +280,7 @@ void DetectorConstruction::SetLabMaterial(const G4String& labMaterial)
 	else
 	{
 		G4cerr << "Material not found" << G4endl;
+
 	}
 }
 
