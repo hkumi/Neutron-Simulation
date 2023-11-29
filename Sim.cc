@@ -26,7 +26,8 @@ int main(int argc, char** argv)
    // #define COMPILATION_SWITCH argv[1]
    // #ifdef COMPILATION_SWITCH == "neutronPhysicsList"
     //#include "PhysicsList.hh"
-    runManager->SetUserInitialization(new MyPhysicsList());
+    //runManager->SetUserInitialization(new MyPhysicsList());
+    runManager->SetUserInitialization(new QGSP_BIC_HP);
     runManager->SetUserInitialization(new MyActionInitialization());
 
     runManager->Initialize();
