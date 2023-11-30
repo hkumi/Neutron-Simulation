@@ -22,7 +22,6 @@ class DetectorConstruction: public G4VUserDetectorConstruction
 
 public:
 
-      
 	DetectorConstruction();
 	virtual ~DetectorConstruction();
 	virtual G4VPhysicalVolume* Construct();
@@ -47,6 +46,7 @@ public:
 	void SetActiveRotationAxisAngle(G4ThreeVector rotationAxis, G4double rotationAngle);
 	G4ThreeVector GetRotationAxis() const { return rotationAxis; }
 	G4double GetRotationAngle() const { return rotationAngle; }
+        G4LogicalVolume *GetScoringVolume() const{return fScoringVolume;}
 
 private:
 	MyDetectorMessenger *myDetectorMessenger{nullptr};
@@ -70,6 +70,7 @@ private:
 
 	G4bool shieldOn{false};
 	G4double shieldThickness{6*cm};
+        G4LogicalVolume *fScoringVolume;
 
 	void DefineMaterials();
 	G4VPhysicalVolume* ConstructDetector();
