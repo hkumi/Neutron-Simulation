@@ -4,7 +4,7 @@
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
-
+#include "G4MTRunManager.hh"
 #include "DetectorConstruction.hh"
 
 #include "ActionInitialization.hh"
@@ -21,7 +21,13 @@
 
 int main(int argc, char** argv)
 {
-    G4RunManager *runManager = new G4RunManager;
+   /*
+    #ifdef G4MULTITHREADED
+      G4MTRunManager* runManager = new G4MTRunManager;
+    #else*/
+      G4RunManager* runManager = new G4RunManager;
+    //#endif
+    G4UImanager *uiManager = G4UImanager::GetUIpointer();
     runManager->SetUserInitialization(new DetectorConstruction);
    // #define COMPILATION_SWITCH argv[1]
    // #ifdef COMPILATION_SWITCH == "neutronPhysicsList"
@@ -30,15 +36,29 @@ int main(int argc, char** argv)
     runManager->SetUserInitialization(new QGSP_BIC_HP);
     runManager->SetUserInitialization(new MyActionInitialization());
 
-    runManager->Initialize();
+    //runManager->Initialize();
 
-    G4UIExecutive *uiExecutive = new G4UIExecutive(argc, argv);
+     G4UIExecutive* uiExecutive = 0;
+     if (argc == 1)
+     { 
+         uiExecutive = new G4UIExecutive(argc,argv);
+     }
+
     G4VisManager *visManager = new G4VisExecutive;
     visManager->Initialize();
-    G4UImanager *uiManager = G4UImanager::GetUIpointer();
-    uiManager->ApplyCommand("/control/execute vis.mac");
+    if(uiExecutive)
+    {
+      uiManager->ApplyCommand("/control/execute vis.mac");
 
-    uiExecutive->SessionStart();
+      uiExecutive->SessionStart();
+    }
+    else
+    {
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      uiManager->ApplyCommand(command+fileName);
+    }
+
 
 
 
@@ -65,35 +85,6 @@ int main(int argc, char** argv)
 //#include "QGSP_BIC_HP.hh"
 	runManager->SetUserInitialization(new QGSP_BIC_HP);
 #endif
-
-	MyPrimaryGeneratorAction *myGeneratorAction =
-			new MyPrimaryGeneratorAction(myDetectorConstruction->GetHalfLabSize());
-	runManager->SetUserAction(myGeneratorAction);
-
-	MyRunAction *myRunAction = new MyRunAction(myDetectorConstruction,
-												myGeneratorAction,
-												COMPILATION_SWITCH);
-	runManager->SetUserAction(myRunAction);
-
-	
-
-	
-
-	uiManager->ApplyCommand("/control/execute vis-init.macro");
-//	uiManager->ApplyCommand("/vis/set/textColour cyan");
-//	uiManager->ApplyCommand("/vis/scene/add/text2D -0.9 0.7 12 ! ! gun particle: "
-//			+ myGeneratorAction->GetLabelParticleGunName());
-//	G4String gunEnergy = myGeneratorAction->GetLabelParticleGunEnergy();
-//	uiManager->ApplyCommand("/vis/scene/add/text2D -0.9 0.6 12 ! ! gun energy: "
-//			+ gunEnergy);
-//	G4String physicsList = COMPILATION_SWITCH;
-//	uiManager->ApplyCommand("/vis/scene/add/text2D -0.9 0.5 12 ! ! physics list: "
-//			+ physicsList);
-	uiExecutive->SessionStart();
-
-	delete uiExecutive;
-	delete visManager;
-    delete runManager;
 */
 	return 0;
 }
