@@ -6,16 +6,16 @@ MyRunAction::MyRunAction()
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
-/*
-    man->CreateNtuple("Neutron_pos", "Neutron_pos");
+//to measure important informations like the wlength of the neutrons created. 
+    man->CreateNtuple("Neutrons", "Neutrons");
     man->CreateNtupleIColumn("fEvent");
     man->CreateNtupleDColumn("fX");
     man->CreateNtupleDColumn("fY");
     man->CreateNtupleDColumn("fZ");
-    man->CreateNtupleDColumn("fT");
+    //man->CreateNtupleDColumn("fT");
     man->CreateNtupleDColumn("fWlen");
     man->FinishNtuple(0);
-*/
+
 
    // this shows the positions of the Neutrons. 
     man->CreateNtuple("Hits", "Hits");
@@ -23,11 +23,11 @@ MyRunAction::MyRunAction()
     man->CreateNtupleDColumn("fX");
     man->CreateNtupleDColumn("fY");
     man->CreateNtupleDColumn("fZ");
-    man->FinishNtuple(0);
-/*
-    man->CreateNtuple("Scoring", "Scoring");
+    man->FinishNtuple(1);
+
+    man->CreateNtuple("Scoring", "Scorimg");
     man->CreateNtupleDColumn("fEdep");
-    man->FinishNtuple(2);*/
+    man->FinishNtuple(2);
 }
 
 MyRunAction::~MyRunAction()

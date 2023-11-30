@@ -20,8 +20,9 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     G4StepPoint *postStepPoint = aStep->GetPostStepPoint();//used when the neutron leaves the detector
 
     G4ThreeVector posNeutron = preStepPoint->GetPosition();//accessing the position
-    G4double energy = preStepPoint->GetTotalEnergy();      //get the energy from the particle
+    G4ThreeVector momNeutron = preStepPoint->GetMomentum();//accessing the momentum. 
     //G4String energyString = G4BestUnit(energy, "Energy"); // Assuming you want the energy in the best unit for energy
+    G4double wlen = (1.239841939*eV/momNeutron.mag())*1E+03; //the deBroglie wavelength of a neutron in nm
 
     const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
 
@@ -33,16 +34,24 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     G4ThreeVector posDetector = physVol->GetTranslation();
 
     G4cout<< "Neutron Position:"<< posDetector << G4endl;
-    G4cout<<"Total Energy: " << energy << G4endl;
 
     G4int evt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
     man->FillNtupleIColumn(0, 0, evt);
-    man->FillNtupleDColumn(0, 1, posDetector[0]);
-    man->FillNtupleDColumn(0, 2, posDetector[1]);
-    man->FillNtupleDColumn(0, 3, posDetector[2]);
+    man->FillNtupleDColumn(0, 1, posNeutron[0]);
+    man->FillNtupleDColumn(0, 2, posNeutron[1]);
+    man->FillNtupleDColumn(0, 3, posNeutron[2]);
+    man->FillNtupleDColumn(0, 4, wlen);
     man->AddNtupleRow(0);
+
+    man->FillNtupleIColumn(1, 0, evt);
+    man->FillNtupleDColumn(1, 1, posDetector[0]);
+    man->FillNtupleDColumn(1, 2, posDetector[1]);
+    man->FillNtupleDColumn(1, 3, posDetector[2]);
+    man->AddNtupleRow(1);
+
+
 
  
     //G4ThreeVector momNeutron = preStepPoint->GetMomentum();

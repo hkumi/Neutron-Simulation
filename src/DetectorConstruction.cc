@@ -208,6 +208,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 	                  checkOverlaps); 			// checking overlaps
 
 	logicalTarget->SetVisAttributes(yellow);
+        fScoringVolume = logicalTarget;
 
 	if (shieldOn)
 	{
