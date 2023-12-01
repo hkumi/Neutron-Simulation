@@ -5,6 +5,7 @@
 #include "G4Event.hh"
 #include "G4AnalysisManager.hh"
 #include "run.hh"
+#include "G4UnitsTable.hh"
 
 class MyEventAction : public G4UserEventAction
 {

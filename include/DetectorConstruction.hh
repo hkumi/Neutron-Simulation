@@ -59,6 +59,8 @@ private:
 	G4Tubs *solidShield{nullptr};
 
 	G4LogicalVolume *logicalLab{nullptr};
+     
+
 	G4LogicalVolume *logicalTarget{nullptr};
 	G4LogicalVolume *logicalShield{nullptr};
         G4LogicalVolume *logicDetector;
@@ -67,14 +69,20 @@ private:
 	G4Material *labMaterial{nullptr};
 	G4Material *targetMaterial{nullptr};
 	G4Material *shieldMaterial{nullptr};
+        
+       
+
 
 	G4bool shieldOn{false};
 	G4double shieldThickness{6*cm};
         G4LogicalVolume *fScoringVolume;
+    
 
 	void DefineMaterials();
 	G4VPhysicalVolume* ConstructDetector();
         virtual void ConstructSDandField();
+ 
+
 
 };
 
