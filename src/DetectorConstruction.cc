@@ -12,7 +12,12 @@
 #include "G4VisAttributes.hh"
 #include "G4RunManager.hh"
 #include "G4RotationMatrix.hh"
+#include "G4MultiFunctionalDetector.hh"
 
+#include "G4PVPlacement.hh"
+#include "G4VPVParameterisation.hh"
+#include "G4SDManager.hh"
+#include "G4Isotope.hh"
 DetectorConstruction::DetectorConstruction()
 :
 G4VUserDetectorConstruction(),
@@ -56,12 +61,18 @@ void DetectorConstruction::DefineMaterials()
 	G4double z; 					// atomic number (number of protons);
 	G4int components, nucleons, numberOfIsotopes, numberOfAtoms, fractionmass;
 
+         //================================== elements ===================================
+        //G4Element *H  = new G4Element("Hydrogen","H",1.,1.0079*g/mole);
+        G4Element *C  = new G4Element("Carbon","C",6.,12.011*g/mole);
+        G4Element *N  = new G4Element("Nitrogen","N",7.,14.007*g/mole);
+        G4Element *O  = new G4Element("Oxygen","O",8.,15.999*g/mole);
+        G4Element *F  = new G4Element("Fluorine","F",9.,18.998*g/mole);
+        //G4Element* Ar = new G4Element("Argon","Ar",18.,39.95*g/mole);
+        G4Element* Au = new G4Element("Gold","Au",79.,196.9665*g/mole);
 
-	
 
 	// pressurized water
 	G4Element *H  = new G4Element("Hydrogen","H", z=1, a=1.0079*g/mole);
-	G4Element *O  = new G4Element("Oxygen","O", z=8, a=16.00*g/mole);
 	G4Material *H2Opressurised = new G4Material("pressurised water",
 									density=1.000*g/cm3,
 									components=2,
@@ -87,7 +98,7 @@ void DetectorConstruction::DefineMaterials()
 
 	 // graphite
         G4Isotope* C12 = new G4Isotope("C12", 6, 12);  
-        G4Element* C   = new G4Element("TS_C_of_Graphite","C", ncomponents=1);
+        C   = new G4Element("TS_C_of_Graphite","C", ncomponents=1);
         C->AddIsotope(C12, 100.*perCent);
         G4Material* graphite = 
         new G4Material("graphite", 2.27*g/cm3, ncomponents=1,
@@ -95,7 +106,6 @@ void DetectorConstruction::DefineMaterials()
         graphite->AddElement(C, natoms=1);
 
         // air
-        G4Element* N = new G4Element("Nitrogen", "N", 7., 14.01*g/mole);
         G4Material* Air = new G4Material("air", 1.290*mg/cm3, ncomponents=2, kStateGas, 293*kelvin, 1*atmosphere);
         Air->AddElement(N, massfraction=70.*perCent);
         Air->AddElement(O, massfraction=30.*perCent);
@@ -129,6 +139,8 @@ void DetectorConstruction::DefineMaterials()
         b_polyethylene->AddElement(Cpe, 61.2*perCent);
         b_polyethylene->AddElement(B, 5*perCent);
         b_polyethylene->AddElement(O, 22.2*perCent);
+
+        
 //	Prevent changing materials to default values if they were adjusted at run time:
 	if (labMaterial == nullptr)
 		labMaterial = vacuum;
@@ -144,6 +156,8 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
+
+
 	G4bool checkOverlaps = true;
 	G4double opacity = 0.4;
 
@@ -209,6 +223,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
 	logicalTarget->SetVisAttributes(yellow);
         fScoringVolume = logicalTarget;
+
 
 	if (shieldOn)
 	{
